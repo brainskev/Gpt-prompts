@@ -1,5 +1,6 @@
 import '@styles/global.css';
-import { children } from 'react';
+import Nav from "@components/Nav";
+import Provider from "@components/Provider";
 
 export const metadata = {
     title: "Promptopia",
@@ -15,6 +16,7 @@ export const metadata = {
             </div>
 
             <main className='app'>
+                <Nav/>
                 {children}
             </main>
         </body>
