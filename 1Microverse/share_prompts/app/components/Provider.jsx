@@ -10,4 +10,4 @@ const Provider = ({children, session}) => {
   )
 }
 
-export default provider
+export default Provider
