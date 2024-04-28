@@ -1,43 +1,47 @@
 'use client';
 
-import {useForm, SubmitHandler } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { FormInputPost } from '@/types';
 import { FC } from 'react';
 
 interface FormPostProps {
     submit: SubmitHandler<FormInputPost>;
+    isEditing: boolean;
 }
 
-const FormPost : FC<FormPostProps> ({submit}) => {
-    const {register, handleSubmit } = useForm<FormInputPost>();
+const FormPost: FC<FormPostProps> = ({ submit, isEditing }) => {
+    const { register, handleSubmit } = useForm<FormInputPost>();
 
+    return (
+        <form onSubmit={handleSubmit(submit)} className='flex flex-col items-center justify-center gap-5 mt-10'>
+            <input
+                type="text"
+                {...register("title", { required: true })}
+                placeholder="post title..."
+                className="input input-bordered w-full max-w-lg"
+            />
 
-  return (
-    <form onSubmit={handleSubmit(submit)} className='flex flex-col items-center justify-center gap-5 mt-10'>
-        <input type="text"
-        {...register("title")}
-         placeholder="post title..."
-          className="input input-bordered w-full max-w-lg"
-         />
+            <textarea
+                {...register("content", { required: true })}
+                className="textarea textarea-bordered w-full max-w-lg"
+                placeholder="post content..."
+            ></textarea>
 
-        <textarea
-        {...register("content")}
-         className="textarea textarea-bordered w-full max-w-lg"
-          placeholder="post content...">
-         </textarea>
-        
-        <select {...register("tag")}
-         className="select select-bordered w-full max-w-lg">
-            <option disabled selected>select tags</option>
-            <option>Han Solo</option>
-            <option>Greedo</option>
-            <option>TheDev</option>
-        </select>
-        <button className='btn btn-primary w-full max-w-lg'>Create</button>
+            <select {...register("tag", { required: true })} 
+                className="select select-bordered w-full max-w-lg"
+                defaultValue={''}
+                >
 
+                <option disabled value = ''>select tags</option>
+                <option>Python</option>
+                <option>Ruby</option>
+                <option>JavaScript</option>
+            </select>
+            <button type='submit' className='btn btn-primary w-full max-w-lg'>
+              {isEditing ? 'Update' : 'Create'}
+            </button>
+        </form>
+    );
+};
 
-    </form>
-  )
-}
-
-export default FormPost
+export default FormPost;
