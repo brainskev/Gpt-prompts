@@ -5,6 +5,7 @@ import { FormInputPost } from '@/types';
 import { FC } from 'react';
 import { useQuery } from 'react-query';
 import axios from 'axios';
+import { Tag } from '@prisma/client';
 
 interface FormPostProps {
     submit: SubmitHandler<FormInputPost>;
@@ -15,13 +16,15 @@ const FormPost: FC<FormPostProps> = ({ submit, isEditing }) => {
     const { register, handleSubmit } = useForm<FormInputPost>();
 
     // Fetch list tags
-    const {data: dataTags, isLoading: IsloadingTags } = useQuery({
+    const {data: dataTags, isLoading: IsloadingTags } = useQuery<Tag[]>({
         queryKey: ['tags'],
         queryFn: async () => {
             const repsonse = await axios.get('/api/tags');
             return repsonse.data;
         },
     });
+
+    console.log(dataTags);
 
     return (
         <form onSubmit={handleSubmit(submit)} className='flex flex-col items-center justify-center gap-5 mt-10'>
@@ -38,16 +41,18 @@ const FormPost: FC<FormPostProps> = ({ submit, isEditing }) => {
                 placeholder="post content..."
             ></textarea>
 
-            <select {...register("tag", { required: true })} 
+            {IsloadingTags ?(
+                <span className="loading loading-dots loading-md"></span>
+            ):(<select {...register("tag", { required: true })} 
                 className="select select-bordered w-full max-w-lg"
                 defaultValue={''}
                 >
 
                 <option disabled value = ''>select tags</option>
-                <option>Python</option>
-                <option>Ruby</option>
-                <option>JavaScript</option>
-            </select>
+                {dataTags?.map((item) => (
+                    <option key={item.id} value={item.id}>{item.name}</option>
+                ))}
+            </select>)}
             <button type='submit' className='btn btn-primary w-full max-w-lg'>
               {isEditing ? 'Update' : 'Create'}
             </button>
