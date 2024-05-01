@@ -3,6 +3,8 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { FormInputPost } from '@/types';
 import { FC } from 'react';
+import { useQuery } from 'react-query';
+import axios from 'axios';
 
 interface FormPostProps {
     submit: SubmitHandler<FormInputPost>;
@@ -11,6 +13,15 @@ interface FormPostProps {
 
 const FormPost: FC<FormPostProps> = ({ submit, isEditing }) => {
     const { register, handleSubmit } = useForm<FormInputPost>();
+
+    // Fetch list tags
+    const {data: dataTags, isLoading: IsloadingTags } = useQuery({
+        queryKey: ['tags'],
+        queryFn: async () => {
+            const repsonse = await axios.get('/api/tags');
+            return repsonse.data;
+        },
+    });
 
     return (
         <form onSubmit={handleSubmit(submit)} className='flex flex-col items-center justify-center gap-5 mt-10'>
