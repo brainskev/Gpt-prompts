@@ -24,8 +24,6 @@ const FormPost: FC<FormPostProps> = ({ submit, isEditing }) => {
         },
     });
 
-    console.log(dataTags);
-
     return (
         <form onSubmit={handleSubmit(submit)} className='flex flex-col items-center justify-center gap-5 mt-10'>
             <input
